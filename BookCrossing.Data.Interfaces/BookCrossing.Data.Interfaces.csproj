@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BookCrossing.Application.ViewModels\BookCrossing.Application.ViewModels.csproj" />
     <ProjectReference Include="..\BookCrossing.Models\BookCrossing.Models.csproj" />
   </ItemGroup>
 

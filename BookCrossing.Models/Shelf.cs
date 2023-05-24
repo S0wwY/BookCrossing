@@ -9,9 +9,11 @@ namespace BookCrossing.Models
 {
     public class Shelf : BaseEntity
     {
+        public string ShelfName { get; set; }  
         public string ShelfImagePath { get; set; }
         public string Adress { get; set; }
-        public virtual IEnumerable<BookCopy> Books { get; set; }
-        //public IEnumerable<HistoryRecord> HistoryRecords { get; set; }
+
+        //public virtual IEnumerable<BookShelf> BookShelves { get; set; }
+        public virtual IEnumerable<Book> Books { get; set; }
     }
 }

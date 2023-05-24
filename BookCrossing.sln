@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCrossing.Models", "Book
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCrossing.Data", "BookCrossing.Data\BookCrossing.Data.csproj", "{FA32FA3D-4852-48C1-946A-F153BB14030F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCrossing.Data.Interfaces", "BookCrossing.Data.Interfaces\BookCrossing.Data.Interfaces.csproj", "{FE838614-CAD8-4F37-9D43-B2F2D021EF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCrossing.Data.Interfaces", "BookCrossing.Data.Interfaces\BookCrossing.Data.Interfaces.csproj", "{FE838614-CAD8-4F37-9D43-B2F2D021EF29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCrossing.Application.Interfaces", "BookCrossing.Application.Interfaces\BookCrossing.Application.Interfaces.csproj", "{A3EE84DB-7BEC-4F31-9F8C-7FC22336ACA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCrossing.Application.Interfaces", "BookCrossing.Application.Interfaces\BookCrossing.Application.Interfaces.csproj", "{A3EE84DB-7BEC-4F31-9F8C-7FC22336ACA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCrossing.Application", "BookCrossing.Application\BookCrossing.Application.csproj", "{05DF6B55-35F5-41A6-9A6F-922FF326B1B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCrossing.Application", "BookCrossing.Application\BookCrossing.Application.csproj", "{05DF6B55-35F5-41A6-9A6F-922FF326B1B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCrossing.Application.ViewModels", "BookCrossing.Application.ViewModels\BookCrossing.Application.ViewModels.csproj", "{4CDE1CA2-3CC3-4337-A6EA-5E7133F7A9CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{05DF6B55-35F5-41A6-9A6F-922FF326B1B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05DF6B55-35F5-41A6-9A6F-922FF326B1B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05DF6B55-35F5-41A6-9A6F-922FF326B1B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CDE1CA2-3CC3-4337-A6EA-5E7133F7A9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CDE1CA2-3CC3-4337-A6EA-5E7133F7A9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CDE1CA2-3CC3-4337-A6EA-5E7133F7A9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CDE1CA2-3CC3-4337-A6EA-5E7133F7A9CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

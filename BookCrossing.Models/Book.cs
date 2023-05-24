@@ -12,12 +12,16 @@ namespace BookCrossing.Models
         public string BookName { get; set; }
         public string Description { get; set; }
         public string Publisher { get; set; }
-        public string Isbn { get; set; }
         public string BookImagePath { get; set; }
-        public int PageCount { get; set; }
+        public string ISBN { get; set; }
 
-        public virtual ICollection<BookWriter> BookWriters { get; set; }
-        public virtual ICollection<BookGenre> BookGenres { get; set; }
-        public virtual ICollection<BookCopy> BookCopies { get; set; }
+        //public virtual IEnumerable<BookShelf> BookShelves { get; set; }
+
+        public int ShelfId { get; set; }
+        public virtual Shelf? Shelf { get; set; }
+        public Guid UserId { get; set; }
+        public virtual User? User { get; set; }
+        public virtual IEnumerable<Writer> Writers { get; set; }
+        public virtual IEnumerable<Genre> Genres { get; set; }
     }
 }

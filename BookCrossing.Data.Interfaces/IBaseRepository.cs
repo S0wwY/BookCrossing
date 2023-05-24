@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BookCrossing.Models.Pagination;
 
 namespace BookCrossing.Data.Interfaces
 {
@@ -13,6 +15,8 @@ namespace BookCrossing.Data.Interfaces
 
         Task<T> GetByIdAsync(int id);
 
+        Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);
+
         Task SaveAsync();
 
         void Insert(T entity);
@@ -20,5 +24,7 @@ namespace BookCrossing.Data.Interfaces
         void Update(T entity);
 
         void Delete(T entity);
+
+        IQueryable<T> FindAll();
     }
 }

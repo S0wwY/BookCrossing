@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -19,9 +20,7 @@ namespace BookCrossing.Data.Migrations
                     BookName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Publisher = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Isbn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PageCount = table.Column<int>(type: "int", nullable: false)
+                    BookImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,6 +46,7 @@ namespace BookCrossing.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Shelfname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShelfImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -62,6 +62,7 @@ namespace BookCrossing.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -76,8 +77,8 @@ namespace BookCrossing.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,34 +112,57 @@ namespace BookCrossing.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookCopies",
+                name: "BookShelves",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true),
-                    ShelfId = table.Column<int>(type: "int", nullable: true)
+                    ShelfId = table.Column<int>(type: "int", nullable: true),
+                    Isbn = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookCopies", x => x.Id);
+                    table.PrimaryKey("PK_BookShelves", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookCopies_Books_BookId",
+                        name: "FK_BookShelves_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookCopies_Shelves_ShelfId",
+                        name: "FK_BookShelves_Shelves_ShelfId",
                         column: x => x.ShelfId,
                         principalTable: "Shelves",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookUser",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateOfAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfRemoved = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookUser", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookCopies_Users_UserId",
+                        name: "FK_BookUser_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookUser_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -168,21 +192,6 @@ namespace BookCrossing.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookCopies_BookId",
-                table: "BookCopies",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookCopies_ShelfId",
-                table: "BookCopies",
-                column: "ShelfId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookCopies_UserId",
-                table: "BookCopies",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BookGenre_BookId",
                 table: "BookGenre",
                 column: "BookId");
@@ -191,6 +200,26 @@ namespace BookCrossing.Data.Migrations
                 name: "IX_BookGenre_GenreId",
                 table: "BookGenre",
                 column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookShelves_BookId",
+                table: "BookShelves",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookShelves_ShelfId",
+                table: "BookShelves",
+                column: "ShelfId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookUser_BookId",
+                table: "BookUser",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookUser_UserId",
+                table: "BookUser",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookWriter_BookId",
@@ -207,22 +236,25 @@ namespace BookCrossing.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookCopies");
-
-            migrationBuilder.DropTable(
                 name: "BookGenre");
 
             migrationBuilder.DropTable(
+                name: "BookShelves");
+
+            migrationBuilder.DropTable(
+                name: "BookUser");
+
+            migrationBuilder.DropTable(
                 name: "BookWriter");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Shelves");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Books");

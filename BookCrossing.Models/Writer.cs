@@ -8,8 +8,8 @@ namespace BookCrossing.Models
 {
     public class Writer : BaseEntity
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public virtual ICollection<BookWriter> BookWriters { get; set; }
+        public string FullName { get; set; } // изменить на фио 
+        //public string LastName { get; set; }
+        public virtual IEnumerable<Book> Books { get; set; }
     }
 }

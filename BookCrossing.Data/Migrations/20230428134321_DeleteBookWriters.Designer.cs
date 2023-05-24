@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookCrossing.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230330142547_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230428134321_DeleteBookWriters")]
+    partial class DeleteBookWriters
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,13 +48,6 @@ namespace BookCrossing.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Isbn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PageCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Publisher")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -62,34 +55,6 @@ namespace BookCrossing.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("BookCrossing.Models.BookCopy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ShelfId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("ShelfId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BookCopies");
                 });
 
             modelBuilder.Entity("BookCrossing.Models.BookGenre", b =>
@@ -115,7 +80,7 @@ namespace BookCrossing.Data.Migrations
                     b.ToTable("BookGenre");
                 });
 
-            modelBuilder.Entity("BookCrossing.Models.BookWriter", b =>
+            modelBuilder.Entity("BookCrossing.Models.BookShelf", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,16 +91,74 @@ namespace BookCrossing.Data.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WriterId")
+                    b.Property<string>("Isbn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ShelfId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("WriterId");
+                    b.HasIndex("ShelfId");
 
-                    b.ToTable("BookWriter");
+                    b.ToTable("BookShelves");
+                });
+
+            modelBuilder.Entity("BookCrossing.Models.BookSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isValid")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BookSubscriptions");
+                });
+
+            modelBuilder.Entity("BookCrossing.Models.BookUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfRemoved")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BookUser");
                 });
 
             modelBuilder.Entity("BookCrossing.Models.Genre", b =>
@@ -171,6 +194,10 @@ namespace BookCrossing.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ShelfName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Shelves");
@@ -196,6 +223,10 @@ namespace BookCrossing.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -209,11 +240,11 @@ namespace BookCrossing.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surname")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -222,27 +253,19 @@ namespace BookCrossing.Data.Migrations
                     b.ToTable("Writers");
                 });
 
-            modelBuilder.Entity("BookCrossing.Models.BookCopy", b =>
+            modelBuilder.Entity("BookWriter", b =>
                 {
-                    b.HasOne("BookCrossing.Models.Book", "Book")
-                        .WithMany("BookCopies")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
 
-                    b.HasOne("BookCrossing.Models.Shelf", "Shelf")
-                        .WithMany("Books")
-                        .HasForeignKey("ShelfId");
+                    b.Property<int>("WritersId")
+                        .HasColumnType("int");
 
-                    b.HasOne("BookCrossing.Models.User", "User")
-                        .WithMany("CurrentBooks")
-                        .HasForeignKey("UserId");
+                    b.HasKey("BooksId", "WritersId");
 
-                    b.Navigation("Book");
+                    b.HasIndex("WritersId");
 
-                    b.Navigation("Shelf");
-
-                    b.Navigation("User");
+                    b.ToTable("BookWriter");
                 });
 
             modelBuilder.Entity("BookCrossing.Models.BookGenre", b =>
@@ -264,32 +287,83 @@ namespace BookCrossing.Data.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("BookCrossing.Models.BookWriter", b =>
+            modelBuilder.Entity("BookCrossing.Models.BookShelf", b =>
                 {
                     b.HasOne("BookCrossing.Models.Book", "Book")
-                        .WithMany("BookWriters")
+                        .WithMany("BookShelves")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookCrossing.Models.Writer", "Writer")
-                        .WithMany("BookWriters")
-                        .HasForeignKey("WriterId")
+                    b.HasOne("BookCrossing.Models.Shelf", "Shelf")
+                        .WithMany("BookShelves")
+                        .HasForeignKey("ShelfId");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Shelf");
+                });
+
+            modelBuilder.Entity("BookCrossing.Models.BookSubscription", b =>
+                {
+                    b.HasOne("BookCrossing.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookCrossing.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
 
-                    b.Navigation("Writer");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BookCrossing.Models.BookUser", b =>
+                {
+                    b.HasOne("BookCrossing.Models.Book", "Book")
+                        .WithMany("BookUsers")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookCrossing.Models.User", "User")
+                        .WithMany("BookUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BookWriter", b =>
+                {
+                    b.HasOne("BookCrossing.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookCrossing.Models.Writer", null)
+                        .WithMany()
+                        .HasForeignKey("WritersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BookCrossing.Models.Book", b =>
                 {
-                    b.Navigation("BookCopies");
-
                     b.Navigation("BookGenres");
 
-                    b.Navigation("BookWriters");
+                    b.Navigation("BookShelves");
+
+                    b.Navigation("BookUsers");
                 });
 
             modelBuilder.Entity("BookCrossing.Models.Genre", b =>
@@ -299,17 +373,12 @@ namespace BookCrossing.Data.Migrations
 
             modelBuilder.Entity("BookCrossing.Models.Shelf", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("BookShelves");
                 });
 
             modelBuilder.Entity("BookCrossing.Models.User", b =>
                 {
-                    b.Navigation("CurrentBooks");
-                });
-
-            modelBuilder.Entity("BookCrossing.Models.Writer", b =>
-                {
-                    b.Navigation("BookWriters");
+                    b.Navigation("BookUsers");
                 });
 #pragma warning restore 612, 618
         }

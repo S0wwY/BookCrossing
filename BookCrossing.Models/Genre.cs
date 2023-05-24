@@ -8,8 +8,7 @@ namespace BookCrossing.Models
 {
     public class Genre : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<BookGenre> BookGenres { get; set; }
-}
+        public virtual IEnumerable<Book> Books { get; set; }
+    }
 }
