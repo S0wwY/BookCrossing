@@ -12,6 +12,7 @@ using BookCrossing.Models.Pagination;
 using System.Net;
 using static System.Reflection.Metadata.BlobBuilder;
 using BookCrossing.Application.ViewModels.ShelfViewModels;
+using BookCrossing.Application.ViewModels.UserBookHistoryViewModels;
 
 namespace BookCrossing.Application.Services
 {
@@ -20,14 +21,17 @@ namespace BookCrossing.Application.Services
         private readonly IBookRepository _bookRepository;
         private readonly IUserContext _userContext;
         private readonly IShelfRepository _shelfRepository;
+        private readonly IUserBookHistoryRepository _userBookHistoryRepository;
 
         public BookService(IBookRepository bookRepository,
             IUserContext userContext,
-            IShelfRepository shelfRepository)
+            IShelfRepository shelfRepository,
+            IUserBookHistoryRepository sBookHistoryRepository)
         {
             _bookRepository = bookRepository;
             _userContext = userContext;
             _shelfRepository = shelfRepository;
+            _userBookHistoryRepository = sBookHistoryRepository;
         }
 
         public async Task AddBookAsync(BookForCreationViewModel newBook)
@@ -46,6 +50,36 @@ namespace BookCrossing.Application.Services
             var book = await _bookRepository.GetByIdAsync(bookId);
             var bookVm = ToBookVmModel(book);
             return bookVm;
+        }
+
+        public async Task DeleteBookById(int bookId)
+        {
+            var book = await _bookRepository.GetByIdAsync(bookId);
+
+            UserBookHistory bookHistory = new UserBookHistory()
+            {
+                BookName = book.BookName,
+                ShelfName = book.Shelf.ShelfName,
+                DateOfPickedUp = DateTime.Now.ToString("yyyy'-'MM'-'dd' 'HH':'mm"),
+                UserId = _userContext.UserId,
+            };
+
+            _userBookHistoryRepository.Insert(bookHistory);
+            await _userBookHistoryRepository.SaveAsync();
+
+            _bookRepository.Delete(book);
+             await _bookRepository.SaveAsync();
+        }
+
+        public async Task<IList<UserBookHistoryViewModel>> GetUserBooksHistory()
+        {
+            var userId = _userContext.UserId;
+
+            var bookEntity = await _userBookHistoryRepository.GetUserBooksHistory(userId);
+
+            var booksVm = ViewModelExtentions.CreateBookHistoryViewModel(bookEntity);
+
+            return booksVm;
         }
 
         public PagedList<Book> GetPagedBooks(BookParameters parameters)

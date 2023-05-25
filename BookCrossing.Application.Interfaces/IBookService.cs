@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BookCrossing.Application.ViewModels.BookViewModels;
+using BookCrossing.Application.ViewModels.UserBookHistoryViewModels;
 using BookCrossing.Models;
 using BookCrossing.Models.Pagination;
 
@@ -22,5 +23,7 @@ namespace BookCrossing.Application.Interfaces
         Task AddBookAsync(BookForCreationViewModel newBook);
         Task<IList<BookViewModel>> GetBooksByShelfNameAsync(string shelfName);
         Task<IList<BookViewModel>> GetUserBooks();
+        Task<IList<UserBookHistoryViewModel>> GetUserBooksHistory();
+        Task DeleteBookById(int bookId);
     }
 }

@@ -101,6 +101,7 @@ builder.Services.AddScoped<IShelfRepository, ShelfRepository>();
 builder.Services.AddScoped<IWriterRepository, WriterRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IBookShelfRepository, BookShelfRepository>();
+builder.Services.AddScoped<IUserBookHistoryRepository, UserBookHistoryRepository>();
 
 IdentityModelEventSource.ShowPII = true;
 

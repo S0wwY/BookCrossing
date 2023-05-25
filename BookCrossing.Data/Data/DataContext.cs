@@ -11,7 +11,8 @@ namespace BookCrossing.Data.Data
         //public DbSet<BookShelf> BookShelves { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
-        public DbSet<BookSubscription> BookSubscriptions { get; set; }
+        public DbSet<UserBookHistory> UserBooks { get; set; }
+        //public DbSet<BookSubscription> BookSubscriptions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

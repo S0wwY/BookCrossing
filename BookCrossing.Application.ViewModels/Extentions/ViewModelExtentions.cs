@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BookCrossing.Application.ViewModels.AuthorViewModels;
 using BookCrossing.Application.ViewModels.GenreViewModels;
+using BookCrossing.Application.ViewModels.UserBookHistoryViewModels;
 
 namespace BookCrossing.Application.ViewModels.Extentions
 {
@@ -19,6 +20,18 @@ namespace BookCrossing.Application.ViewModels.Extentions
             foreach (var book in books)
             {
                 booksVm.Add(new BookViewModel(book));
+            }
+
+            return booksVm;
+        }
+
+        public static IList<UserBookHistoryViewModel> CreateBookHistoryViewModel(IList<UserBookHistory> books)
+        {
+            List<UserBookHistoryViewModel> booksVm = new List<UserBookHistoryViewModel>();
+
+            foreach (var book in books)
+            {
+                booksVm.Add(new UserBookHistoryViewModel(book));
             }
 
             return booksVm;

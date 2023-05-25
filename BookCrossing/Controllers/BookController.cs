@@ -1,5 +1,6 @@
 ﻿using BookCrossing.Application.Interfaces;
 using BookCrossing.Application.ViewModels.BookViewModels;
+using BookCrossing.Application.ViewModels.UserBookHistoryViewModels;
 using BookCrossing.Models;
 using BookCrossing.Models.Email;
 using BookCrossing.Models.Pagination;
@@ -35,6 +36,14 @@ namespace BookCrossing.Controllers
         public async Task<IList<BookViewModel>> GetUserBooks()
         {
             var books = await _bookService.GetUserBooks();
+            return books;
+        }
+
+        [HttpGet("BooksHistory")]
+        public async Task<IList<UserBookHistoryViewModel>> GetBooksHistory()
+        {
+            var books = await _bookService.GetUserBooksHistory();
+
             return books;
         }
 
@@ -104,6 +113,11 @@ namespace BookCrossing.Controllers
             await _bookShelfService.PutOnShelfAsync(bookId, shelfId);
         }
 
+        [HttpDelete("DeleteBook/{id}")]
+        public async Task DeleteBookById(int id)
+        {
+            await _bookService.DeleteBookById(id);
+        }
         //[HttpPost("TakeBookFromShelf")]
         //public async Task TakeBookFromShelf(int bookId)
         //{
